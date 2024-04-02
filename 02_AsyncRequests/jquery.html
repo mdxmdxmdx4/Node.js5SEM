@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>jQuery Example</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <h1 id="fullName">ФИО: </h1>
+  <p></p>
+
+  <script>
+    $(document).ready(function() {
+      $.ajax({
+        url: '/api/name',
+        method: 'GET',
+        success: function(fullName) {
+          $('#fullName').append(fullName);
+        },
+        error: function(xhr, status, error) {
+          console.error(`Ошибка: ${status}`);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

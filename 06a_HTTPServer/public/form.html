@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form</title>
+  </head>
+  <body>
+    <form id="myForm">
+      <label for="text">Text:</label>
+      <input type="text" name="text" id="text" /><br />
+
+      <label for="number">Number:</label>
+      <input type="number" name="number" id="number" /><br />
+
+      <label for="checkbox">Checkbox:</label>
+      <input type="checkbox" name="checkbox" id="checkbox" /><br />
+
+      <label for="radiobutton">Radio Button:</label>
+      <input
+        type="radio"
+        name="radiobutton"
+        id="radiobutton1"
+        value="option1"
+      />
+      Option 1
+      <input
+        type="radio"
+        name="radiobutton"
+        id="radiobutton2"
+        value="option2"
+      />
+      Option 2<br />
+
+      <label for="textarea">Textarea:</label>
+      <textarea name="textarea" id="textarea" rows="4" cols="50"></textarea
+      ><br />
+
+      <input type="submit" value="Submit" />
+      <input type="submit" value="Submit 2" />
+    </form>
+
+    <div id="resultContainer"></div>
+
+    <script>
+      document
+        .getElementById("myForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          const formData = new FormData(this);
+
+          fetch("/formparameter", {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => response.text())
+            .then((result) => {
+              document.getElementById("resultContainer").innerHTML = result;
+            });
+        });
+    </script>
+  </body>
+</html>

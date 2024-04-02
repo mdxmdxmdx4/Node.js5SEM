@@ -1,0 +1,56 @@
+<!-- chat.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chat Viewer</title>
+  <style>
+    #messages {
+      height: 400px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+      padding: 5px;
+      overflow: auto;
+    }
+  </style>
+</head>
+<body>
+<h1>Chat</h1>
+<div id="messages">
+</div>
+
+<div>
+  <input id="username" placeholder="Username" disabled/>
+  <input id="message" placeholder="Message" disabled/>
+  <button id="sendButton" onclick="sendMessage()" disabled>Send</button>
+  <button onclick="disconnect()">Disconnect from chat</button>
+</div>
+
+<script>
+  const messagesDiv = document.getElementById('messages');
+  let socket;
+
+  function connect() {
+    socket = new WebSocket('ws://localhost:4000');
+
+    socket.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      const messageNode = document.createTextNode(`${message.username}: ${message.message}`);
+      const messageDiv = document.createElement('div');
+      messageDiv.appendChild(messageNode);
+      messagesDiv.insertBefore(messageDiv, messagesDiv.firstChild);
+    }
+
+    socket.onclose = () => {
+      console.log('Disconnected from the server');
+    };
+  }
+
+  function disconnect() {
+    socket.close();
+  }
+
+  connect();
+</script>
+
+</body>
+</html>

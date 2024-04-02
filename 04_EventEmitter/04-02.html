@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="users">
+        <h1>GET</h1>
+        <button onclick="getUsers()">get users</button>
+        <table id="data" class="table">
+            <thead>
+                <tr id="header">
+                    <th>id</th>
+                    <th>name</th>
+                    <th>birthday</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div>
+        <h1>Post and put</h1>
+        <div class="row">
+            <label>ID</label>
+            <input type="number" id="IDUser"/>
+        </div>
+        <div class="row">
+            <label>Name</label>
+            <input type="text" id="NameUser"/>
+        </div>
+        <div class="row">
+            <label>BDay</label>
+            <input type="text" id="BDayUser"/>
+        </div>
+        <button onclick="postUser()">post user</button>
+        <button onclick="putUser()">put user</button>
+    </div>
+    <div>
+        <h1>DELETE</h1>
+        <div class="row">
+            <label>ID delete User</label>
+            <input type="number" id="IDUserDeleted"/>
+        </div>
+        <button onclick="deleteUser()">delete user</button>
+    </div>
+</body>
+
+<script>
+    function getUsers() {
+        fetch("http://localhost:5000/api/db", { method: "GET" }).then(result => {return result.json()}).then(users => {
+            var table = document.getElementById("data");
+
+            while (table.rows.length > 1) {
+                table.deleteRow(1);
+            }
+
+            users.forEach(element => {
+                var tr = document.createElement('tr');
+
+                var td1 = document.createElement('td');
+                var td2 = document.createElement('td');
+                var td3 = document.createElement('td');
+
+                var text1 = document.createTextNode(element.id);
+                var text2 = document.createTextNode(element.name);
+                var text3 = document.createTextNode(element.bday);
+
+                td1.appendChild(text1);
+                td2.appendChild(text2);
+                td3.appendChild(text3);
+
+                tr.appendChild(td1);
+                tr.appendChild(td2);
+                tr.appendChild(td3);
+
+                table.appendChild(tr);
+            });
+        }).catch(error => {
+            alert(error);
+        })
+    }
+    function postUser(){
+        if(IDUser.value == "" || NameUser.value == "" || BDayUser.value == ""){
+            alert("Enter field!!!")
+            return;
+        }
+        fetch("http://localhost:5000/api/db",{ 
+            method: "POST",
+            body: JSON.stringify({id: IDUser.value,name: NameUser.value,bday: BDayUser.value})
+        })
+        .then(response => response.text())
+        .then(result => alert(result))
+        .catch((errorMessage) => {
+            alert(errorMessage);
+        })
+        IDUser.value = "";
+        NameUser.value = "";
+        BDayUser.value = "";
+        getUsers();
+    }
+    function putUser(){
+        if(IDUser.value == "" || NameUser.value == "" || BDayUser.value == ""){
+            alert("Enter field!!!")
+            return;
+        }
+        fetch(`http://localhost:5000/api/db?id=${IDUserDeleted.value}`,{ 
+            method: "PUT",
+            body: JSON.stringify({id: IDUser.value,name: NameUser.value,bday: BDayUser.value})
+        })
+        .then(response => response.text())
+        .catch((errorMessage) => {
+            alert(errorMessage);
+        })
+        IDUser.value = "";
+        NameUser.value = "";
+        BDayUser.value = "";
+        getUsers();
+    }
+    function deleteUser(){
+        if(IDUserDeleted.value == ""){
+            alert("Enter field!!!")
+            return;
+        }
+        fetch(`http://localhost:5000/api/db?id=${IDUserDeleted.value}`,{ 
+        method: "DELETE"
+        })
+            .then(response => response.text())
+            .then(result => alert(result))
+            .catch((errorMessage) => {
+                alert(errorMessage); 
+            })
+        IDUserDeleted.value = "";
+        getUsers();
+    }
+
+</script>
+</html>

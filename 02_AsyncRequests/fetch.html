@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fetch Example</title>
+</head>
+<body>
+  <h1 id="fullName">Имя, Фамилия, Отчество: </h1>
+  <p></p>
+
+  <script>
+
+    async function fetchData() {
+      try {
+        const response = await fetch('/api/name');
+        if (response.ok) {
+          const fullName = await response.text();
+          document.getElementById('fullName').textContent += fullName;
+        } else {
+          console.error(`Ошибка: ${response.status}`);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    window.onload = fetchData;
+  </script>
+</body>
+</html>

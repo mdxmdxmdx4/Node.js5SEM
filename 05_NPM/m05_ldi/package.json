@@ -1,0 +1,14 @@
+{
+  "name": "m05_ldi",
+  "version": "1.0.0",
+  "description": "very useful functions",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "test"
+  ],
+  "author": "Leshuk Dmitry",
+  "license": "ISC"
+}

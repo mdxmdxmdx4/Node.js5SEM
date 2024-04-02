@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Task4</title>
+</head>
+<body>
+  <h1 id="fullName">Имя, Фамилия, Отчество: </h1>
+
+
+<script>
+  function makeRequest() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'http://localhost:5000/api/name', true);
+
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        var fullName = xhr.responseText;
+        document.getElementById('fullName').textContent += fullName;
+      }
+    };
+
+    xhr.send();
+  }
+  window.onload = makeRequest;
+</script>
+
+</body>
+</html>

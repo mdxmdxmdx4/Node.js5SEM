@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "node-fetch": "^2.7.0",
+    "readline-sync": "^1.4.10"
+  }
+}

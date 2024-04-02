@@ -1,0 +1,69 @@
+<!-- index.html -->
+<html>
+<head>
+  <title>Chat</title>
+  <style>
+    #messages {
+      height: 400px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+      padding: 5px;
+      overflow: auto;
+    }
+  </style>
+</head>
+<body>
+<h1>Chat</h1>
+<div id="messages">
+</div>
+
+<div>
+  <input id="username" placeholder="Username" />
+  <input id="message" placeholder="Message" />
+  <button id="sendButton" onclick="sendMessage()">Send</button>
+  <button onclick="disconnect()">Disconnect from chat</button>
+</div>
+
+<script>
+  const messagesDiv = document.getElementById('messages');
+  const sendButton = document.getElementById('sendButton');
+  let socket;
+
+  function connect() {
+    socket = new WebSocket('ws://localhost:4000');
+
+    socket.onopen = () => {
+      console.log('Connected to the server');
+    };
+
+    socket.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      const messageNode = document.createTextNode(`${message.username}: ${message.message}`);
+      const messageDiv = document.createElement('div');
+      messageDiv.appendChild(messageNode);
+      messagesDiv.insertBefore(messageDiv, messagesDiv.firstChild);
+    }
+
+    socket.onclose = () => {
+      console.log('Disconnected from the server');
+    };
+  }
+
+  function disconnect() {
+    socket.close();
+    document.getElementById('username').disabled = true;
+    document.getElementById('message').disabled = true;
+    sendButton.disabled = true;
+  }
+
+  function sendMessage() {
+    const username = document.getElementById('username').value;
+    const message = document.getElementById('message').value;
+    socket.send(JSON.stringify({ username, message }));
+  }
+
+  connect();
+</script>
+
+</body>
+</html>
